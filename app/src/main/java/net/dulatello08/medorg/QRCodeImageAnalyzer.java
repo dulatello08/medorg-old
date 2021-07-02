@@ -19,9 +19,8 @@ import static android.graphics.ImageFormat.YUV_420_888;
 import static android.graphics.ImageFormat.YUV_422_888;
 import static android.graphics.ImageFormat.YUV_444_888;
 
-
 public class QRCodeImageAnalyzer implements ImageAnalysis.Analyzer {
-    private final QRCodeFoundListener listener;
+    private QRCodeFoundListener listener;
 
     public QRCodeImageAnalyzer(QRCodeFoundListener listener) {
         this.listener = listener;
@@ -54,5 +53,4 @@ public class QRCodeImageAnalyzer implements ImageAnalysis.Analyzer {
 
         image.close();
     }
-
 }

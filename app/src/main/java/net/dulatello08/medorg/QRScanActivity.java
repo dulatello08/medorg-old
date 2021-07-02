@@ -27,6 +27,7 @@ import java.util.concurrent.ExecutionException;
 
 public class QRScanActivity extends AppCompatActivity {
     private static final int PERMISSION_REQUEST_CAMERA = 0;
+
     private PreviewView previewView;
     private ListenableFuture<ProcessCameraProvider> cameraProviderFuture;
 
@@ -65,6 +66,19 @@ public class QRScanActivity extends AppCompatActivity {
             }
         }
     }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == PERMISSION_REQUEST_CAMERA) {
+            if (grantResults.length == 1 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                startCamera();
+            } else {
+                Toast.makeText(this, "Camera Permission Denied", Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
     private void startCamera() {
         cameraProviderFuture.addListener(() -> {
             try {
@@ -75,7 +89,7 @@ public class QRScanActivity extends AppCompatActivity {
             }
         }, ContextCompat.getMainExecutor(this));
     }
-    
+
     private void bindCameraPreview(@NonNull ProcessCameraProvider cameraProvider) {
         previewView.setPreferredImplementationMode(PreviewView.ImplementationMode.SURFACE_VIEW);
 
