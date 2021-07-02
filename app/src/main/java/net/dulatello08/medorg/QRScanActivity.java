@@ -1,56 +1,59 @@
 package net.dulatello08.medorg;
 
-import android.Manifest;
-import android.content.pm.PackageManager;
-import android.os.Bundle;
-import android.view.MenuItem;
-import android.widget.Toast;
-
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.camera.core.Camera;
 import androidx.camera.core.CameraSelector;
+import androidx.camera.core.ImageAnalysis;
 import androidx.camera.core.Preview;
 import androidx.camera.lifecycle.ProcessCameraProvider;
 import androidx.camera.view.PreviewView;
-import androidx.camera.view.PreviewView.ImplementationMode;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.lifecycle.LifecycleOwner;
+
+import android.Manifest;
+import android.content.pm.PackageManager;
+import android.os.Bundle;
+import android.util.Log;
+import android.util.Size;
+import android.view.View;
+import android.widget.Button;
+import android.widget.Toast;
 
 import com.google.common.util.concurrent.ListenableFuture;
 
 import java.util.concurrent.ExecutionException;
 
 public class QRScanActivity extends AppCompatActivity {
+    private static final int PERMISSION_REQUEST_CAMERA = 0;
     private PreviewView previewView;
     private ListenableFuture<ProcessCameraProvider> cameraProviderFuture;
-    private static final int PERMISSION_REQUEST_CAMERA = 0;
+
+    private Button qrCodeFoundButton;
+    private String qrCode;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_qrscan);
-        //
-        ActionBar actionBar = getSupportActionBar();
-
-        // showing the back button in action bar
-        actionBar.setDisplayHomeAsUpEnabled(true);
 
         previewView = findViewById(R.id.activity_main_previewView);
 
-        cameraProviderFuture = ProcessCameraProvider.getInstance(this);
+        qrCodeFoundButton = findViewById(R.id.activity_main_qrCodeFoundButton);
+        qrCodeFoundButton.setVisibility(View.INVISIBLE);
+        qrCodeFoundButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(getApplicationContext(), qrCode, Toast.LENGTH_SHORT).show();
+                Log.i(MainActivity.class.getSimpleName(), "QR Code Found: " + qrCode);
+            }
+        });
 
+        cameraProviderFuture = ProcessCameraProvider.getInstance(this);
         requestCamera();
     }
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                this.finish();
-                return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }
+
     private void requestCamera() {
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
             startCamera();
@@ -72,8 +75,9 @@ public class QRScanActivity extends AppCompatActivity {
             }
         }, ContextCompat.getMainExecutor(this));
     }
+    
     private void bindCameraPreview(@NonNull ProcessCameraProvider cameraProvider) {
-        previewView.setImplementationMode(ImplementationMode.COMPATIBLE);
+        previewView.setPreferredImplementationMode(PreviewView.ImplementationMode.SURFACE_VIEW);
 
         Preview preview = new Preview.Builder()
                 .build();
@@ -82,9 +86,27 @@ public class QRScanActivity extends AppCompatActivity {
                 .requireLensFacing(CameraSelector.LENS_FACING_BACK)
                 .build();
 
-        preview.setSurfaceProvider(previewView.getSurfaceProvider());
+        preview.setSurfaceProvider(previewView.createSurfaceProvider());
 
-        Camera camera = cameraProvider.bindToLifecycle((LifecycleOwner)this, cameraSelector, preview);
+        ImageAnalysis imageAnalysis =
+                new ImageAnalysis.Builder()
+                        .setTargetResolution(new Size(1280, 720))
+                        .setBackpressureStrategy(ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST)
+                        .build();
+
+        imageAnalysis.setAnalyzer(ContextCompat.getMainExecutor(this), new QRCodeImageAnalyzer(new QRCodeFoundListener() {
+            @Override
+            public void onQRCodeFound(String _qrCode) {
+                qrCode = _qrCode;
+                qrCodeFoundButton.setVisibility(View.VISIBLE);
+            }
+
+            @Override
+            public void qrCodeNotFound() {
+                qrCodeFoundButton.setVisibility(View.INVISIBLE);
+            }
+        }));
+
+        Camera camera = cameraProvider.bindToLifecycle((LifecycleOwner)this, cameraSelector, imageAnalysis, preview);
     }
-
 }

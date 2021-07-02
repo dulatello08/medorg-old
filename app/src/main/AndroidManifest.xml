@@ -4,6 +4,7 @@
     package="net.dulatello08.medorg"
     android:hardwareAccelerated="true">
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.CAMERA"/>
     <uses-sdk tools:overrideLibrary="com.google.zxing.client.android" />
     <application
         android:allowBackup="true"

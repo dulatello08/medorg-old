@@ -13,4 +13,5 @@
     <string name="menu_gallery">Отчеты</string>
     <string name="menu_slideshow">Инструкция</string>
     <string name="qrscanmode">Войти в режим сканирования</string>
+    <string name="qr_code_found">QR Code Found</string>
 </resources>
