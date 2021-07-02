@@ -73,7 +73,7 @@ public class QRScanActivity extends AppCompatActivity {
         }, ContextCompat.getMainExecutor(this));
     }
     private void bindCameraPreview(@NonNull ProcessCameraProvider cameraProvider) {
-        PreviewView.ImplementationMode(PreviewView.ImplementationMode.SurfaceView);
+        previewView.setImplementationMode(ImplementationMode.COMPATIBLE);
 
         Preview preview = new Preview.Builder()
                 .build();
@@ -82,7 +82,7 @@ public class QRScanActivity extends AppCompatActivity {
                 .requireLensFacing(CameraSelector.LENS_FACING_BACK)
                 .build();
 
-        preview.setSurfaceProvider(previewView.createSurfaceProvider());
+        preview.setSurfaceProvider(previewView.getSurfaceProvider());
 
         Camera camera = cameraProvider.bindToLifecycle((LifecycleOwner)this, cameraSelector, preview);
     }
