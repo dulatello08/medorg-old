@@ -72,11 +72,13 @@ public class LoginSuccess extends AppCompatActivity {
         TextView nav_email = (TextView)hView.findViewById(R.id.textEmail);
         nav_email.setText(Email);
 
-        Uri photoUri1 = Uri.parse(photoUri);
+
+        //No code no problem
+        /*Uri photoUri1 = Uri.parse(photoUri);
 
         ImageView nav_img = (ImageView) hView.findViewById(R.id.imageView);
         nav_img.setImageURI(null);
-        nav_img.setImageURI(photoUri1);
+        nav_img.setImageURI(photoUri1);*/
 
 
 
