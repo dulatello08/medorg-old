@@ -55,4 +55,6 @@ dependencies {
 
     // qrcode reader
     implementation 'com.google.zxing:core:3.3.0'
+    //firebase
+    implementation 'com.google.firebase:firebase-database'
 }

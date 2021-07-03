@@ -3,6 +3,7 @@ package net.dulatello08.medorg;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -14,10 +15,13 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.Task;
 
+import java.io.Serializable;
+
 public class MainActivity extends AppCompatActivity implements View.OnClickListener{
     private static final Object TAG = null;
     public GoogleSignInClient mGoogleSignInClient;
     private static final int RC_SIGN_IN = 1;
+    public static final String EXTRA_MESSAGE = "net.dulatello08.medorg.MESSAGE";
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -43,6 +47,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             //do nothing haha
         }else {
             //dont skip auth
+            String personName = account.getDisplayName();
+            String personFamilyName = account.getFamilyName();
+            String personEmail = account.getEmail();
+            Uri personPhoto = account.getPhotoUrl();
+            StringBuilder sb = new StringBuilder(personName);
+            login_success.putExtra(Intent.EXTRA_TEXT, (Serializable) sb);
+            login_success.putExtra(Intent.EXTRA_EMAIL, personEmail);
+            login_success.putExtra(Intent.EXTRA_STREAM, personPhoto);
             startActivity(login_success);
         }
     }
