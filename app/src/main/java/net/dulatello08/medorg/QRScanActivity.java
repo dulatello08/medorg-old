@@ -26,6 +26,10 @@ import android.widget.Toast;
 
 import com.google.common.util.concurrent.ListenableFuture;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.Statement;
 import java.util.concurrent.ExecutionException;
 
 public class QRScanActivity extends AppCompatActivity {
@@ -46,12 +50,8 @@ public class QRScanActivity extends AppCompatActivity {
 
         qrCodeFoundButton = findViewById(R.id.activity_main_qrCodeFoundButton);
         qrCodeFoundButton.setVisibility(View.INVISIBLE);
-        qrCodeFoundButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(getApplicationContext(), qrCode, Toast.LENGTH_SHORT).show();
-                Log.i(MainActivity.class.getSimpleName(), "QR Code Found: " + qrCode);
-            }
+        qrCodeFoundButton.setOnClickListener(v -> {
+
         });
 
         cameraProviderFuture = ProcessCameraProvider.getInstance(this);
