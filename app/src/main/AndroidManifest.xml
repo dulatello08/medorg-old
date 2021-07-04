@@ -18,7 +18,7 @@
         android:theme="@style/Theme.MedOrg">
         <activity
             android:name=".SettingsActivity"
-            android:label="@string/title_activity_settings"></activity>
+            android:label="@string/title_activity_settings" />
         <activity
             android:name=".LoginSuccess"
             android:label="@string/title_activity_login_success"
