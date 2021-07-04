@@ -41,6 +41,7 @@ dependencies {
     implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.3.1'
     implementation 'androidx.navigation:navigation-fragment:2.3.5'
     implementation 'androidx.navigation:navigation-ui:2.3.5'
+    implementation 'androidx.preference:preference:1.1.1'
     testImplementation 'junit:junit:4.13.2'
     implementation platform('com.google.firebase:firebase-bom:28.2.0')
     implementation 'com.google.firebase:firebase-auth'
@@ -57,4 +58,9 @@ dependencies {
     implementation 'com.google.zxing:core:3.3.0'
     //firebase
     implementation 'com.google.firebase:firebase-database'
+    //settings
+    def preference_version = "1.1.1"
+
+    // Java language implementation
+    implementation "androidx.preference:preference:$preference_version"
 }

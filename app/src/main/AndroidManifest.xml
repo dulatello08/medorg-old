@@ -3,9 +3,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="net.dulatello08.medorg"
     android:hardwareAccelerated="true">
-    <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.CAMERA"/>
+
     <uses-sdk tools:overrideLibrary="com.google.zxing.client.android" />
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.CAMERA" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -14,9 +17,12 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MedOrg">
         <activity
+            android:name=".SettingsActivity"
+            android:label="@string/title_activity_settings"></activity>
+        <activity
             android:name=".LoginSuccess"
             android:label="@string/title_activity_login_success"
-            android:theme="@style/Theme.MedOrg.NoActionBar"></activity>
+            android:theme="@style/Theme.MedOrg.NoActionBar" />
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

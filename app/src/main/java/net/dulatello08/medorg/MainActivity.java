@@ -21,7 +21,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private static final Object TAG = null;
     public GoogleSignInClient mGoogleSignInClient;
     private static final int RC_SIGN_IN = 1;
-    public static final String EXTRA_MESSAGE = "net.dulatello08.medorg.MESSAGE";
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -43,12 +43,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private void updateUI(GoogleSignInAccount account) {
         Intent login_success = new Intent(this, LoginSuccess.class);
-        if (account == null) {
-            //do nothing haha
-        }else {
+        boolean notsignedin=account==null;
+        if (!notsignedin) {
             //dont skip auth
             String personName = account.getDisplayName();
-            String personFamilyName = account.getFamilyName();
             String personEmail = account.getEmail();
             Uri personPhoto = account.getPhotoUrl();
             StringBuilder sb = new StringBuilder(personName);
@@ -56,6 +54,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             login_success.putExtra(Intent.EXTRA_EMAIL, personEmail);
             login_success.putExtra(Intent.EXTRA_STREAM, personPhoto);
             startActivity(login_success);
+        }else {
+            //do nothing haha
         }
     }
     public void onClick(View v) {
